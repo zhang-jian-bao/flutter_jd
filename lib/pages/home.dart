@@ -15,11 +15,11 @@ class HomePages extends StatefulWidget {
 }
 
 class _HomePagesState extends State<HomePages> {
-  List arr;
-  List arr2;
-  List arr3;
-  List ss;
-  List arr1;
+  List arr=[];
+  List arr2=[];
+  List arr3=[];
+  List ss=[];
+  List arr1=[];
   int index = 1;
   bool loading = false;
   //相当于created声明周期
@@ -177,7 +177,8 @@ class _HomePagesState extends State<HomePages> {
   Widget ban(BuildContext context) {
     return new Swiper(
       itemBuilder: (BuildContext context, int index) {
-        return new Image.network(
+        return 
+        new Image.network(
           "http://jd.itying.com/${arr[index]['pic']}", //通过下标得到当前图片的路径
           fit: BoxFit.fill,
         );
@@ -438,7 +439,7 @@ class _HomePagesState extends State<HomePages> {
               //轮播图布局
               new Container(
                 //轮播图
-                child: ban(context),
+                child:arr.length>0?ban(context):Image.asset('images/1.jpg', fit: BoxFit.fill,),
                 height: ScreenUtil().setHeight(356), //适配屏幕大小
                 width: ScreenUtil().setWidth(750), //适配屏幕大小
               ),

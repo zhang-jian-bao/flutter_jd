@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../config/http.dart';
-import 'package:provide/provide.dart'; //引入provide仓库
-import "../provide/counter.dart";
 // import 'package:dio/dio.dart';
 
 
@@ -16,11 +14,10 @@ class SearchPages extends StatefulWidget {
 }
 
 class _SearchPagesState extends State<SearchPages> {
-  List arr1=[];
-  List arr2=[];
-  List arr3=[];
+  List arr1;
+  List arr2;
+  List arr3;
   String _pid;
-  String id;
 //  List arr=['白酒','啤酒','葡萄酒','清酒洋酒','保健酒','预调酒','下酒小菜','饮料','乳制品','休闲零食','粮油调味'];
 //相当于created声明周期
   void initState() { 
@@ -33,16 +30,14 @@ class _SearchPagesState extends State<SearchPages> {
   Future list() async{
     var res=await http('HomePageSl', 'get', null);
     // print(res);
-    // Object all={
-    //   'title':'全部',
-    //   '_id':' 59f1e1ada1da8b15d42234e9'
-    // };
-    // res['result'].insert(0,all);
+    Object all={
+      'title':'全部',
+      '_id':' 59f1e1ada1da8b15d42234e9'
+    };
+    res['result'].insert(0,all);
      setState(() {
       arr1 = res['result'];
-       id=arr1[0]['_id'];
     });
-     Provide.value<Counter>(context).fenLei('${arr1[0]['_id']}');
     arr1.forEach((item){
       item['pic'] = item['pic'].replaceAll(new RegExp(r'\\'), '/');
       });
@@ -50,7 +45,7 @@ class _SearchPagesState extends State<SearchPages> {
   //右侧下的列表数据
    Future list2() async{
     var res=await http('HomePageSl', 'get', {"pid":_pid});
-    // print(res);
+    print(res);
      setState(() {
       arr2 = res['result'];
     });
@@ -66,16 +61,15 @@ class _SearchPagesState extends State<SearchPages> {
           GestureDetector(
             onTap: (){
               setState(() {
-                id=val['_id'];
+                _pid="${val['_id']}";
               });
-              Provide.value<Counter>(context).fenLei('${val['_id']}');
-              // list2();
+              list2();
               // print(_pid);
             },
             child:new Container(
             child: new Text("${val['title']}",
               style: TextStyle(
-                color: val['_id']==id?Colors.red:Colors.grey
+                color: val['_id']==_pid?Colors.red:Colors.grey
               ),
             ),
             width: ScreenUtil().setWidth(190),
@@ -110,7 +104,7 @@ class _SearchPagesState extends State<SearchPages> {
           new Container(
             child: new Text("${val['title']}",
             style: TextStyle(
-              color:val['_id']==id?Colors.red:Colors.grey
+              color:val['_id']==_pid?Colors.red:Colors.grey
               ),
             ),
             padding: EdgeInsets.all(10),
@@ -118,7 +112,7 @@ class _SearchPagesState extends State<SearchPages> {
           )
 
         );
-        // print('$val');
+        print('$val');
       }
       return Row(children:list1,);
     }
@@ -150,46 +144,10 @@ class _SearchPagesState extends State<SearchPages> {
           )
 
         );
-        // print('$val');
+        print('$val');
       }
       return ListView(children:list2,);
     }
-//渲染仓库数据
-   Widget getChip() {
-      return  Provide<Counter>(       //获取仓库数据渲染页面
-        builder: (context, child,counter) {
-             List<Widget> wares=counter.arr.map((val){
-              // print(val);
-              return InkWell(
-                child:new Container(
-            child: Row(
-              children: <Widget>[
-                Image.network("http://jd.itying.com/${val['pic']}",
-                  width: ScreenUtil().setWidth(100),
-                  height: ScreenUtil().setHeight(100),
-                  
-                ),
-                Column(
-                  children: <Widget>[
-                   new Container(
-                     child:  Text("${val['title']}"),
-                     margin: EdgeInsets.only(left:20),
-                   )
-                    // Text("${val['title']}")
-                  ],
-                )
-              ],
-            ),
-            padding: EdgeInsets.all(10),
-          )
-                );
-
-      }).toList();
-
-          return  ListView(children:wares);
-        },
-      );
-   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -221,8 +179,7 @@ class _SearchPagesState extends State<SearchPages> {
                     ),
                     Expanded(
                     flex:9,
-                    child:getChip()
-                    
+                    child:rightlist()
                     )
                 ],
                 )

@@ -3,10 +3,17 @@ import 'pages/home.dart';
 import 'pages/search.dart';
 import 'pages/shop.dart';
 import 'pages/my.dart';
+// import 'pages/test.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';//引入屏幕适配库
+import 'package:provide/provide.dart';//引入provide仓库
+import './provide/counter.dart';
 
 void main() {
-  runApp(MyApp());
+  //main函数里面引用provide
+    var counter = Counter();//引入counter.dart中的counter类名
+    var providers =Providers();//创建一个Provides
+    providers..provide(Provider<Counter>.value(counter));
+    runApp(ProviderNode(child: MyApp(),providers: providers,));
 }
 
 class MyApp extends StatelessWidget {
@@ -30,7 +37,8 @@ class bottom_nav extends StatefulWidget {
 
 class _bottom_navState extends State<bottom_nav> {
   var  _index = 0;
-  var list = [HomePages(), SearchPages(), ShopPages(), MyPages()];
+  // TestPages()测试
+  var list = [HomePages(), SearchPages(), ShopPages(), MyPages(),];
   @override
   Widget build(BuildContext context) {
      ScreenUtil.init(context, width: 750, height: 1579, allowFontScaling: false);
@@ -42,6 +50,7 @@ class _bottom_navState extends State<bottom_nav> {
         BottomNavigationBarItem(
             icon: Icon(Icons.shopping_cart), title: Text('购物车')),
         BottomNavigationBarItem(icon: Icon(Icons.person), title: Text('会员中心')),
+        // BottomNavigationBarItem(icon: Icon(Icons.person), title: Text('测试')),
       ],
       type: BottomNavigationBarType.fixed,
       fixedColor: Colors.red,
