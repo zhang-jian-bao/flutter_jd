@@ -7,6 +7,7 @@ class ShopPages extends StatefulWidget {
 }
 
 class _ShopPagesState extends State<ShopPages> {
+  String aa='hello';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,7 +17,7 @@ class _ShopPagesState extends State<ShopPages> {
       body: new ListView(
         children: <Widget>[
           new Container(
-            child: Text('购物车'),
+            child: Son(aa: 'hello11111',),
           )
         ],        
       ),
@@ -25,18 +26,26 @@ class _ShopPagesState extends State<ShopPages> {
 }
 
 //传参
-// class Son extends StatefulWidget {
-//   Son({Key key,}) : super(key: key);
+class Son extends StatefulWidget {
+  Son({Key key,this.aa}) : super(key: key);
+  String aa;
 
-//   @override
-//   _SonState createState() => _SonState();
-// }
+  @override
+  _SonState createState() => _SonState();
+}
 
-// class _SonState extends State<Son> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//        child: child,
-//     );
-//   }
-// }
+class _SonState extends State<Son> {
+  var a;
+  @override
+  void initState() { 
+    super.initState();
+    a=widget.aa;
+    print(widget.aa);
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+       child: Text(a),
+    );
+  }
+}

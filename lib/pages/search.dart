@@ -32,15 +32,9 @@ class _SearchPagesState extends State<SearchPages> {
  //左侧列表接口数据
   Future list() async{
     var res=await http('HomePageSl', 'get', null);
-    // print(res);
-    // Object all={
-    //   'title':'全部',
-    //   '_id':' 59f1e1ada1da8b15d42234e9'
-    // };
-    // res['result'].insert(0,all);
      setState(() {
       arr1 = res['result'];
-       id=arr1[0]['_id'];
+       id=arr1[0]['_id'];//让初始值的id为第一个id值
     });
      Provide.value<Counter>(context).fenLei('${arr1[0]['_id']}');
     arr1.forEach((item){
@@ -66,8 +60,9 @@ class _SearchPagesState extends State<SearchPages> {
           GestureDetector(
             onTap: (){
               setState(() {
-                id=val['_id'];
+                id=val['_id'];//当点击左侧数据时，动态的赋值id值
               });
+              //将id值传到仓库中
               Provide.value<Counter>(context).fenLei('${val['_id']}');
               // list2();
               // print(_pid);
@@ -127,7 +122,11 @@ class _SearchPagesState extends State<SearchPages> {
       List<Widget> list2=[];
       for(var val in arr2){
         list2.add(
-          new Container(
+          new GestureDetector(
+            onTap: (){
+              print('点击商品${val['_id']}');
+              Navigator.of(context).pushNamed("FenXq", arguments: "${val['_id']}");
+            },
             child: Row(
               children: <Widget>[
                 Image.network("http://jd.itying.com/${val['pic']}",
@@ -146,7 +145,7 @@ class _SearchPagesState extends State<SearchPages> {
                 )
               ],
             ),
-            padding: EdgeInsets.all(10),
+            // padding: EdgeInsets.all(10),
           )
 
         );
@@ -154,14 +153,31 @@ class _SearchPagesState extends State<SearchPages> {
       }
       return ListView(children:list2,);
     }
-//渲染仓库数据
+//读取详情接口
+// var obj;
+// Future xq(e) async{
+//   var res=await http("FenXqPageXq", "get", {"id":e});
+//    setState(() {
+//     obj = res['result'];
+//     });
+//     obj.forEach((item){
+//       item['pic'] = item['pic'].replaceAll(new RegExp(r'\\'), '/');
+//       });
+//    Navigator.of(context).pushNamed("FenXq1", arguments:obj );
+// }
+//渲染仓库数据 右侧下边的数据列表（正在用）
    Widget getChip() {
       return  Provide<Counter>(       //获取仓库数据渲染页面
         builder: (context, child,counter) {
              List<Widget> wares=counter.arr.map((val){
               // print(val);
               return InkWell(
-                child:new Container(
+                child:GestureDetector(
+                   onTap: (){
+              // print('点击商品$val');
+              // xq(val['_id']);
+           
+            },
             child: Row(
               children: <Widget>[
                 Image.network("http://jd.itying.com/${val['pic']}",
@@ -180,7 +196,7 @@ class _SearchPagesState extends State<SearchPages> {
                 )
               ],
             ),
-            padding: EdgeInsets.all(10),
+            // padding: EdgeInsets.all(10),
           )
                 );
 

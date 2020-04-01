@@ -1,12 +1,17 @@
+import 'package:anli/route/fen_xq.dart';
 import 'package:flutter/material.dart';
 import 'pages/home.dart';
 import 'pages/search.dart';
 import 'pages/shop.dart';
 import 'pages/my.dart';
+import 'route/fen_xq.dart';
 // import 'pages/test.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';//引入屏幕适配库
 import 'package:provide/provide.dart';//引入provide仓库
 import './provide/counter.dart';
+import './routers/application.dart';
+import './routers/routers.dart';
+import 'package:fluro/fluro.dart';
 
 void main() {
   //main函数里面引用provide
@@ -21,9 +26,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final router=Router();
+    Routers.configureRouters(router);
+    Application.router=router;
     return MaterialApp(
+      onGenerateRoute: Application.router.generator,
       debugShowCheckedModeBanner: false,
       home: bottom_nav(),
+      // routes: {
+      //   "FenXq1":(context)=>FenXq(),
+      // },
     );
   }
 }

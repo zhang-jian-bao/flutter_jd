@@ -1,3 +1,4 @@
+import 'package:anli/routers/application.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -63,7 +64,7 @@ class _HomePagesState extends State<HomePages> {
 
     var da = {'page': '$index'};
     print(da);
-    http("HomePageSl", "get", da).then((val) {
+    http("HomePageShophot11", "get", da).then((val) {
       //九宫格
       // print(val['result']);
       if (val['result'] == []) {
@@ -209,7 +210,12 @@ class _HomePagesState extends State<HomePages> {
   Widget buildGrid() {
     List<Widget> tiles = []; //先建一个数组用于存放循环生成的widget
     for (var item in arr1) {
-      tiles.add(new Container(
+      tiles.add(
+        InkWell(
+          onTap: (){
+             Application.router.navigateTo(context,"./detail?id=${item['_id']}");
+          },
+          child: new Container(
         width: 160,
         // height: 140,
         color: Colors.white,
@@ -253,7 +259,9 @@ class _HomePagesState extends State<HomePages> {
             )
           ],
         ),
-      ));
+      ),
+        )
+      );
     }
     return Wrap(
       children: tiles,
@@ -264,7 +272,13 @@ class _HomePagesState extends State<HomePages> {
  Widget buildGrid123() {
     List<Widget> tiles = []; //先建一个数组用于存放循环生成的widget
     for (var item in arr2) {
-      tiles.add(new Container(
+      tiles.add(
+        InkWell(
+          // onTap: (){
+          //   Application.router.navigateTo(context,"./detail?id=${item['_id']}");
+          //   // Navigator.of(context).pushNamed("FenXq1", arguments:item['_id']);
+          // },
+          child:new Container(
         width: 160,
         // height: 140,
         color: Colors.white,
@@ -308,7 +322,9 @@ class _HomePagesState extends State<HomePages> {
             )
           ],
         ),
-      ));
+      ),
+        )
+      );
     }
     return Wrap(
       children: tiles,
@@ -536,10 +552,16 @@ class _CaiNi_loveState extends State<CaiNi_love> {
 
   //自定义组件循环接口数据并渲染页面和布局
   //map循环列表渲染
-  Widget buildGrid() {
+  Widget buildGrid1111() {
     List<Widget> tiles = []; //先建一个数组用于存放循环生成的widget
     for (var item in arr2) {
-      tiles.add(new Container(
+      tiles.add(
+        InkWell(
+          onTap: (){
+            print('111111111111222222222222');
+             Application.router.navigateTo(context,"./detail?id=${item['_id']}");
+          },
+          child: new Container(
         width: 160,
         // height: 140,
         color: Colors.white,
@@ -586,7 +608,9 @@ class _CaiNi_loveState extends State<CaiNi_love> {
             )
           ],
         ),
-      ));
+      ),
+        )
+      );
     }
     return Wrap(
       children: tiles,
@@ -601,7 +625,7 @@ class _CaiNi_loveState extends State<CaiNi_love> {
       child: Column(
         children: <Widget>[
           hot_you,
-          buildGrid()
+          // buildGrid()
           //  new Container(
           //    child: Text("arr2[0]['title']"),
           //  )
@@ -642,7 +666,13 @@ class _Hot_tuiState extends State<Hot_tui> {
   Widget buildGrid() {
     List<Widget> tiles = []; //先建一个数组用于存放循环生成的widget
     for (var item in arr1) {
-      tiles.add(new Container(
+      tiles.add(
+        InkWell(
+          onTap: (){
+            print('11111');
+             Application.router.navigateTo(context,"./detail?id=${item['_id']}");
+          },
+          child: new Container(
         width: 160,
         // height: 140,
         color: Colors.white,
@@ -686,7 +716,9 @@ class _Hot_tuiState extends State<Hot_tui> {
             )
           ],
         ),
-      ));
+      ),
+        )
+      );
     }
     return Wrap(
       children: tiles,
@@ -1001,661 +1033,4 @@ class _Banner_FenState extends State<Banner_Fen> {
   }
 }
 
-//flex布局 轮播图下的分类
-class My_flex extends StatefulWidget {
-  My_flex({Key key}) : super(key: key);
 
-  @override
-  _My_flexState createState() => _My_flexState();
-}
-
-class _My_flexState extends State<My_flex> {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        new Container(
-          child: Flex(
-            direction: Axis.horizontal,
-            children: <Widget>[
-              Expanded(
-                flex: 1,
-                child: Column(
-                  children: <Widget>[
-                    new Container(
-                      child: Image.asset(
-                        'images/4.jpg',
-                        width: 40,
-                        height: 40,
-                      ),
-                    ),
-                    new Container(
-                      child: Text(
-                        '白酒',
-                        style: TextStyle(fontSize: 10),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Column(
-                  children: <Widget>[
-                    new Container(
-                      child: Image.asset(
-                        'images/5.jpg',
-                        width: 40,
-                        height: 40,
-                      ),
-                    ),
-                    new Container(
-                      child: Text(
-                        '啤酒',
-                        style: TextStyle(fontSize: 12),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Column(
-                  children: <Widget>[
-                    new Container(
-                      child: Image.asset(
-                        'images/6.jpg',
-                        width: 40,
-                        height: 40,
-                      ),
-                    ),
-                    new Container(
-                      child: Text(
-                        '葡萄酒',
-                        style: TextStyle(fontSize: 12),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Column(
-                  children: <Widget>[
-                    new Container(
-                      child: Image.asset(
-                        'images/7.jpg',
-                        width: 40,
-                        height: 40,
-                      ),
-                    ),
-                    new Container(
-                      child: Text(
-                        '清酒洋酒',
-                        style: TextStyle(fontSize: 12),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Column(
-                  children: <Widget>[
-                    new Container(
-                      child: Image.asset(
-                        'images/8.jpg',
-                        width: 40,
-                        height: 40,
-                      ),
-                    ),
-                    new Container(
-                      child: Text(
-                        '保健酒',
-                        style: TextStyle(fontSize: 12),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ],
-          ),
-          margin: EdgeInsets.only(top: 10),
-        ),
-        new Container(
-          child: Flex(
-            direction: Axis.horizontal,
-            children: <Widget>[
-              Expanded(
-                flex: 1,
-                child: Column(
-                  children: <Widget>[
-                    new Container(
-                      child: Image.asset(
-                        'images/9.jpg',
-                        width: 40,
-                        height: 40,
-                      ),
-                    ),
-                    new Container(
-                      child: Text(
-                        '预调酒',
-                        style: TextStyle(fontSize: 12),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Column(
-                  children: <Widget>[
-                    new Container(
-                      child: Image.asset(
-                        'images/10.jpg',
-                        width: 40,
-                        height: 40,
-                      ),
-                    ),
-                    new Container(
-                      child: Text(
-                        '下酒小菜',
-                        style: TextStyle(fontSize: 12),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Column(
-                  children: <Widget>[
-                    new Container(
-                      child: Image.asset(
-                        'images/11.jpg',
-                        width: 40,
-                        height: 40,
-                      ),
-                    ),
-                    new Container(
-                      child: Text(
-                        '饮料',
-                        style: TextStyle(fontSize: 12),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Column(
-                  children: <Widget>[
-                    new Container(
-                      child: Image.asset(
-                        'images/13.jpg',
-                        width: 40,
-                        height: 40,
-                      ),
-                    ),
-                    new Container(
-                      child: Text(
-                        '乳制品',
-                        style: TextStyle(fontSize: 12),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Column(
-                  children: <Widget>[
-                    new Container(
-                      child: Image.asset(
-                        'images/14.jpg',
-                        width: 40,
-                        height: 40,
-                      ),
-                    ),
-                    new Container(
-                      child: Text(
-                        '休闲零食',
-                        style: TextStyle(fontSize: 12),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ],
-          ),
-          margin: EdgeInsets.only(top: 10),
-        )
-      ],
-    );
-  }
-}
-
-//九宫格布局第一种 导航分类
-class JiuGunGe_one extends StatefulWidget {
-  JiuGunGe_one({Key key}) : super(key: key);
-
-  @override
-  _JiuGunGe_oneState createState() => _JiuGunGe_oneState();
-}
-
-class _JiuGunGe_oneState extends State<JiuGunGe_one> {
-  @override
-  Widget build(BuildContext context) {
-    return GridView(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 5, //每行显示五条数据
-          mainAxisSpacing: 10, //上下间距
-          crossAxisSpacing: 10, //左右间距
-          childAspectRatio: 1.0 //宽高比例1:0
-          ),
-      children: <Widget>[
-        new Container(
-          child: Column(
-            children: <Widget>[
-              new Container(
-                child: Image.asset(
-                  'images/4.jpg',
-                  width: 40,
-                  height: 40,
-                ),
-              ),
-              new Container(
-                child: Text(
-                  '白酒',
-                  style: TextStyle(fontSize: 12),
-                ),
-              )
-            ],
-          ),
-        ),
-        new Container(
-          child: Column(
-            children: <Widget>[
-              new Container(
-                child: Image.asset(
-                  'images/5.jpg',
-                  width: 40,
-                  height: 40,
-                ),
-              ),
-              new Container(
-                child: Text(
-                  '啤酒',
-                  style: TextStyle(fontSize: 12),
-                ),
-              )
-            ],
-          ),
-        ),
-        new Container(
-          child: Column(
-            children: <Widget>[
-              new Container(
-                child: Image.asset(
-                  'images/6.jpg',
-                  width: 40,
-                  height: 40,
-                ),
-              ),
-              new Container(
-                child: Text(
-                  '葡萄酒',
-                  style: TextStyle(fontSize: 12),
-                ),
-              )
-            ],
-          ),
-        ),
-        new Container(
-          child: Column(
-            children: <Widget>[
-              new Container(
-                child: Image.asset(
-                  'images/7.jpg',
-                  width: 40,
-                  height: 40,
-                ),
-              ),
-              new Container(
-                child: Text(
-                  '清酒洋酒',
-                  style: TextStyle(fontSize: 12),
-                ),
-              )
-            ],
-          ),
-        ),
-        new Container(
-          child: Column(
-            children: <Widget>[
-              new Container(
-                child: Image.asset(
-                  'images/8.jpg',
-                  width: 40,
-                  height: 40,
-                ),
-              ),
-              new Container(
-                child: Text(
-                  '保健酒',
-                  style: TextStyle(fontSize: 12),
-                ),
-              )
-            ],
-          ),
-        ),
-        new Container(
-          child: Column(
-            children: <Widget>[
-              new Container(
-                child: Image.asset(
-                  'images/9.jpg',
-                  width: 40,
-                  height: 40,
-                ),
-              ),
-              new Container(
-                child: Text(
-                  '预调酒',
-                  style: TextStyle(fontSize: 12),
-                ),
-              )
-            ],
-          ),
-        ),
-        new Container(
-          child: Column(
-            children: <Widget>[
-              new Container(
-                child: Image.asset(
-                  'images/10.jpg',
-                  width: 40,
-                  height: 40,
-                ),
-              ),
-              new Container(
-                child: Text(
-                  '下酒小菜',
-                  style: TextStyle(fontSize: 12),
-                ),
-              )
-            ],
-          ),
-        ),
-        new Container(
-          child: Column(
-            children: <Widget>[
-              new Container(
-                child: Image.asset(
-                  'images/11.jpg',
-                  width: 40,
-                  height: 40,
-                ),
-              ),
-              new Container(
-                child: Text(
-                  '饮料',
-                  style: TextStyle(fontSize: 12),
-                ),
-              )
-            ],
-          ),
-        ),
-        new Container(
-          child: Column(
-            children: <Widget>[
-              new Container(
-                child: Image.asset(
-                  'images/14.jpg',
-                  width: 40,
-                  height: 40,
-                ),
-              ),
-              new Container(
-                child: Text(
-                  '乳制品',
-                  style: TextStyle(fontSize: 12),
-                ),
-              )
-            ],
-          ),
-        ),
-        new Container(
-          child: Column(
-            children: <Widget>[
-              new Container(
-                child: Image.asset(
-                  'images/13.jpg',
-                  width: 40,
-                  height: 40,
-                ),
-              ),
-              new Container(
-                child: Text(
-                  '休闲零食',
-                  style: TextStyle(fontSize: 12),
-                ),
-              )
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-//九宫格布局 导航分类 第二种
-class JiuGunGe_two extends StatefulWidget {
-  JiuGunGe_two({Key key}) : super(key: key);
-
-  @override
-  _JiuGunGe_twoState createState() => _JiuGunGe_twoState();
-}
-
-class _JiuGunGe_twoState extends State<JiuGunGe_two> {
-  @override
-  Widget build(BuildContext context) {
-    return GridView.count(
-      crossAxisCount: 5, //每行显示5条数据
-      crossAxisSpacing: 10, //左右间距
-      mainAxisSpacing: 10, //上下间距
-      children: <Widget>[
-        new Container(
-          child: Column(
-            children: <Widget>[
-              new Container(
-                child: Image.asset(
-                  'images/4.jpg',
-                  width: 40,
-                  height: 40,
-                ),
-              ),
-              new Container(
-                child: Text(
-                  '白酒',
-                  style: TextStyle(fontSize: 12),
-                ),
-              )
-            ],
-          ),
-        ),
-        new Container(
-          child: Column(
-            children: <Widget>[
-              new Container(
-                child: Image.asset(
-                  'images/5.jpg',
-                  width: 40,
-                  height: 40,
-                ),
-              ),
-              new Container(
-                child: Text(
-                  '啤酒',
-                  style: TextStyle(fontSize: 12),
-                ),
-              )
-            ],
-          ),
-        ),
-        new Container(
-          child: Column(
-            children: <Widget>[
-              new Container(
-                child: Image.asset(
-                  'images/6.jpg',
-                  width: 40,
-                  height: 40,
-                ),
-              ),
-              new Container(
-                child: Text(
-                  '葡萄酒',
-                  style: TextStyle(fontSize: 12),
-                ),
-              )
-            ],
-          ),
-        ),
-        new Container(
-          child: Column(
-            children: <Widget>[
-              new Container(
-                child: Image.asset(
-                  'images/7.jpg',
-                  width: 40,
-                  height: 40,
-                ),
-              ),
-              new Container(
-                child: Text(
-                  '清酒洋酒',
-                  style: TextStyle(fontSize: 12),
-                ),
-              )
-            ],
-          ),
-        ),
-        new Container(
-          child: Column(
-            children: <Widget>[
-              new Container(
-                child: Image.asset(
-                  'images/8.jpg',
-                  width: 40,
-                  height: 40,
-                ),
-              ),
-              new Container(
-                child: Text(
-                  '保健酒',
-                  style: TextStyle(fontSize: 12),
-                ),
-              )
-            ],
-          ),
-        ),
-        new Container(
-          child: Column(
-            children: <Widget>[
-              new Container(
-                child: Image.asset(
-                  'images/9.jpg',
-                  width: 40,
-                  height: 40,
-                ),
-              ),
-              new Container(
-                child: Text(
-                  '预调酒',
-                  style: TextStyle(fontSize: 12),
-                ),
-              )
-            ],
-          ),
-        ),
-        new Container(
-          child: Column(
-            children: <Widget>[
-              new Container(
-                child: Image.asset(
-                  'images/10.jpg',
-                  width: 40,
-                  height: 40,
-                ),
-              ),
-              new Container(
-                child: Text(
-                  '下酒小菜',
-                  style: TextStyle(fontSize: 12),
-                ),
-              )
-            ],
-          ),
-        ),
-        new Container(
-          child: Column(
-            children: <Widget>[
-              new Container(
-                child: Image.asset(
-                  'images/11.jpg',
-                  width: 40,
-                  height: 40,
-                ),
-              ),
-              new Container(
-                child: Text(
-                  '饮料',
-                  style: TextStyle(fontSize: 12),
-                ),
-              )
-            ],
-          ),
-        ),
-        new Container(
-          child: Column(
-            children: <Widget>[
-              new Container(
-                child: Image.asset(
-                  'images/14.jpg',
-                  width: 40,
-                  height: 40,
-                ),
-              ),
-              new Container(
-                child: Text(
-                  '乳制品',
-                  style: TextStyle(fontSize: 12),
-                ),
-              )
-            ],
-          ),
-        ),
-        new Container(
-          child: Column(
-            children: <Widget>[
-              new Container(
-                child: Image.asset(
-                  'images/13.jpg',
-                  width: 40,
-                  height: 40,
-                ),
-              ),
-              new Container(
-                child: Text(
-                  '休闲零食',
-                  style: TextStyle(fontSize: 12),
-                ),
-              )
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}

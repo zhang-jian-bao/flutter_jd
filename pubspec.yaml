@@ -32,7 +32,8 @@ dependencies:
   # 这是上拉加载、下拉刷新的包
   provide: ^1.0.2
   #  相当于redux、状态管理仓库
-
+  fluro: ^1.4.0
+  # 路由文件
 dev_dependencies:
   flutter_test:
     sdk: flutter
