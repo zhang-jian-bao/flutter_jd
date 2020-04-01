@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provide/provide.dart';
 import '../provide/counter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../provide/counter.dart';
 class ShopPages extends StatefulWidget {
   ShopPages({Key key}) : super(key: key);
 
@@ -10,47 +9,33 @@ class ShopPages extends StatefulWidget {
   _ShopPagesState createState() => _ShopPagesState();
 }
 
-class _ShopPagesState extends State<ShopPages>  {
-
-//从provide中获取数据，并循环，传值
-Widget ss(){
-  return Provide<Counter>(
+class _ShopPagesState extends State<ShopPages> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title:Text('购物车')),
+      body:ss()
+    );
+  }
+  //购物车商品组件
+  Widget ss(){
+    return Provide<Counter>(
       //获取仓库数据渲染页面
       builder: (context, child, counter) {
         List<Widget> wares = counter.obj.map((val) {
           return InkWell(
-                child: Container(
-                  padding: EdgeInsets.only(top:10,bottom:10),
-                  decoration: BoxDecoration( 
-              border:Border(bottom:BorderSide(width: 1,color: Color(0xffe5e5e5)) )
-                  ),
-                  child: Row(
-              children:[
-                // Text('$val')
-             _cartCheckButton(val),
+                child: new Container(
+            child: Row(
+              children: <Widget>[
+              Container(
+          child:ListView(children: <Widget>[
+            Row(children:[
+            _cartCheckButton(),
             _cartImage(val),
             _cartName(val),
             _cartPrice(val)
             ]
-            ),
-                ),
-             );
-        }).toList();
-
-        return Column(children: wares);
-      },
-    );
-}
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('购物车'),),
-      body: Stack(
-      children: <Widget>[
-        Container(
-          child:ListView(children: <Widget>[
-            ss()
+            )
           ],),
         ),
         Positioned(
@@ -58,15 +43,23 @@ Widget ss(){
           left:0,
           child:bottom()
         )
-      ],
-    ),
-    );
-  }
-  
-  //购物车商品组件
+              ],
+              
+            ),
+            padding: EdgeInsets.all(10),
+          ),onTap:(){
+            print(val["_id"]);
+          } ,
+             );
+        }).toList();
 
+        return Column(children: wares);
+      },
+    );
+  } 
+  
   //选择商品的按钮
-  Widget _cartCheckButton(val) {
+  Widget _cartCheckButton() {
     return Container(
       alignment: Alignment.center,
       child: Checkbox(
@@ -80,7 +73,7 @@ Widget ss(){
   }
 
   //商品图片
-  Widget _cartImage(val) {
+  Widget _cartImage(str) {
     return Container(
       width:80,
       height: 80,
@@ -88,36 +81,32 @@ Widget ss(){
       decoration: BoxDecoration(
         border: Border.all(width: 1, color: Colors.black12),
       ),
-      child:
-      // Text('$val')
-      Image.network("http://jd.itying.com/${val['pic']}"),
+      child: Image.network("http://jd.itying.com/${str['pic']}"),
     );
   }
 
   //商品名称
-  Widget _cartName(val) {
+  Widget _cartName(str) {
     return Container(
       width:120,
       padding: const EdgeInsets.all(10.0),
       alignment: Alignment.topLeft,
       child: Column(
         children: <Widget>[
-          Text("${val['title']}"),
-          // Text('$val')
+          Text("${str['title']}"),
         ],
       ),
     );
   }
 
   //商品价格
-  Widget _cartPrice(val) {
+  Widget _cartPrice(str) {
     return Container(
       width: 100,
       alignment: Alignment.centerRight,
       child: Column(
         children: <Widget>[
-          Text("${val['price']}"),
-          // Text('$val'),
+          Text("${str['price']}"),
           Container(
             child: InkWell(
               child: Icon(

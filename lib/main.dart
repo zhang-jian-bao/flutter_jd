@@ -12,6 +12,7 @@ import './provide/counter.dart';
 import './routers/application.dart';
 import './routers/routers.dart';
 import 'package:fluro/fluro.dart';
+import 'package:oktoast/oktoast.dart';
 
 void main() {
   //main函数里面引用provide
@@ -29,14 +30,16 @@ class MyApp extends StatelessWidget {
     final router=Router();
     Routers.configureRouters(router);
     Application.router=router;
-    return MaterialApp(
+    return OKToast(
+      child: MaterialApp(
       onGenerateRoute: Application.router.generator,
       debugShowCheckedModeBanner: false,
       home: bottom_nav(),
       // routes: {
       //   "FenXq1":(context)=>FenXq(),
       // },
-    );
+    )
+      );
   }
 }
 
@@ -55,7 +58,7 @@ class _bottom_navState extends State<bottom_nav> {
   Widget build(BuildContext context) {
      ScreenUtil.init(context, width: 750, height: 1579, allowFontScaling: false);
     return Scaffold(
-      body: list[_index],
+      body: IndexedStack(index:_index,children: list,),//保存底部导航切换时的状态，避免重绘
       bottomNavigationBar: BottomNavigationBar(items: [
         BottomNavigationBarItem(icon: Icon(Icons.home), title: Text('首页')),
         BottomNavigationBarItem(icon: Icon(Icons.search), title: Text('分类')),

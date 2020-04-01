@@ -1,7 +1,12 @@
+import 'package:anli/config/http1.dart';
 import 'package:flutter/material.dart';
+import 'package:oktoast/oktoast.dart';
 import '../config/http.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:provide/provide.dart'; //引入provide仓库
+import "../provide/counter.dart";
 class FenXq extends StatefulWidget {
   FenXq({Key key,this.goodsId}) : super(key: key);
   var goodsId;
@@ -13,7 +18,10 @@ class _FenXqState extends State<FenXq> {
   
   var args;
  var arr;
-  bool load=false;
+ bool load=false;
+  bool loadd=false;
+  bool gg=false;
+  List acc=[];
   @override
   void initState() { 
     super.initState();
@@ -21,6 +29,7 @@ class _FenXqState extends State<FenXq> {
     print(args+'id值');
     getRoute(args);
   }
+ //传入id值，读取接口
   Future getRoute(id) async{
     // print("详情页获取$e");
     // var res;
@@ -76,7 +85,7 @@ var res= await Dio().get('http://jd.itying.com/api/pcontent?id='+id);
       child:  Column(
       children: <Widget>[
         Container(
-          child: Image.asset("http://jd.itying.com/${arr['pic']}", fit: BoxFit.fill),
+          child: Image.network("http://jd.itying.com/${arr['pic']}", fit: BoxFit.fill),
           width: ScreenUtil().setWidth(750),
           height: ScreenUtil().setHeight(500),
           padding: EdgeInsets.all(20),
@@ -94,6 +103,45 @@ var res= await Dio().get('http://jd.itying.com/api/pcontent?id='+id);
                 margin: EdgeInsets.only(right:10,),
               ),
               Text("市场价${arr['price']}",style: TextStyle(
+                color: Colors.grey,
+                decoration: TextDecoration.lineThrough,
+              ),)
+            ],
+          ),
+        )
+      ],
+    ),
+    );
+    }else{
+      Text('加载中。。。');
+    }
+  }
+  Widget top1(res){
+    if(load){
+      return Container(
+      color: Colors.white,
+      padding: EdgeInsets.all(10),
+      child:  Column(
+      children: <Widget>[
+        Container(
+          child: Image.network("http://jd.itying.com/${res['pic']}", fit: BoxFit.fill),
+          width: ScreenUtil().setWidth(750),
+          height: ScreenUtil().setHeight(500),
+          padding: EdgeInsets.all(20),
+        ),
+        Container(
+          child: Text("${res['title']}"),
+          alignment: Alignment.centerLeft,
+        ),
+        Container(
+          margin: EdgeInsets.only(top:10),
+          child: Row(
+            children: <Widget>[
+              Container(
+                child: Text("${res['old_price']}",style: TextStyle(color: Colors.red,fontSize: 20),),
+                margin: EdgeInsets.only(right:10,),
+              ),
+              Text("市场价${res['price']}",style: TextStyle(
                 color: Colors.grey,
                 decoration: TextDecoration.lineThrough,
               ),)
@@ -178,7 +226,13 @@ var res= await Dio().get('http://jd.itying.com/api/pcontent?id='+id);
              ),
            Expanded(
              flex: 2,
-             child:Container(
+             child:GestureDetector(
+               onTap: (){
+                 setState(() {
+                   loadd=!loadd;
+                 });
+               },
+               child: Container(
                child: Column(
                  children: <Widget>[
                    Icon(Icons.shopping_cart,color: Colors.white,),
@@ -191,10 +245,15 @@ var res= await Dio().get('http://jd.itying.com/api/pcontent?id='+id);
                alignment: Alignment.center,
              ),
              
+             )
             ),
           Expanded(
             flex: 2,
-            child:Container(
+            child:InkWell(
+              onTap: (){
+
+              },
+              child:Container(
                child: Column(
                  children: <Widget>[
                    Icon(Icons.group,color: Colors.white,),
@@ -207,28 +266,150 @@ var res= await Dio().get('http://jd.itying.com/api/pcontent?id='+id);
                alignment: Alignment.center,
              ),
             )
+            )
          ],
        
        )
      )
      );
  }
- //类型数据渲染（颜色、型号）
+ //类型数据渲染使用flutter_html插件一步解决
  Widget xh(){
-   List <Widget> cc=[];
-   List <Widget> dd=[];
+  return Container(
+     child: Html(data: arr['content']),
+   );
+  
+ }
+ //类型如颜色等规格属性循环并渲染,用传值达到循环嵌套
+ Widget co(){
+   List<Widget> cc=[];
    for(var val in arr['attr']){
      cc.add(
-       Row(
-         children: <Widget>[
-           Text("${val['cate']}"),
-         ],
-       )
+        Row(
+       children:<Widget>[
+          Container(
+            // height: 300,
+            // color: Colors.white,
+            padding: EdgeInsets.all(10),
+            child: Text("${val['cate']}:",style: TextStyle(
+            color: Colors.red,
+            fontSize: 16,
+            ),),
+          ),
+          dem(val['list'])
+       ],
+     )
      );
-    
    }
    return Column(children: cc,);
-  
+ }
+ Widget dem(res){
+    List<Widget> dd=[];
+   for(var val in res){
+     dd.add(
+       InkWell(
+         onTap: (){
+           setState(() {
+             this.gg=!this.gg;
+           });
+           
+           res.forEach((item){
+             print(item);
+             acc.remove(item);
+           });
+           acc.add(val);
+           print(acc);
+         },
+         child:Container(
+         child: Text('$val',style: TextStyle(
+           color: acc.contains(val)?Colors.red:Colors.black)
+           ,),
+         decoration: BoxDecoration(
+           border: Border.all(width: 1,color:Colors.grey)
+         ),
+         margin: EdgeInsets.only(left:10),
+         padding: EdgeInsets.all(4),
+       )
+       )
+     );
+   }
+   return Row(children: dd,);
+ }
+ //弹出框
+ Widget tan(){
+   if(loadd){
+     return Positioned(
+         left: 0,
+         right: 0,
+         top: 0,
+         bottom: 0,
+         child: Container(
+           width: double.infinity,
+           height: double.infinity,
+           color: Colors.black12,
+           child: Container(
+             width:  double.infinity,
+             height: 500,
+             margin: EdgeInsets.only(top:300),
+             decoration: BoxDecoration(
+               border: Border.all(width:1,color: Colors.red)
+             ),
+            child: Column(
+              children: <Widget>[
+                Container(
+                  height: 217,
+                  color: Colors.white,
+                  child: co(),
+                ),
+               Flex(
+                 direction: Axis.horizontal,
+                 children: <Widget>[
+                   Expanded(
+                     flex: 1,
+                     child: InkWell(
+                  onTap:(){
+                    print('加入购物车成功');
+                   setState(() {
+                      loadd=false;
+                      acc=[];
+                   });
+                    Provide.value<Counter>(context).addList(arr);
+                   showToast('加入购物车成功');
+                  },
+                  child: Container(
+                      height: 40,
+                    alignment: Alignment.center,
+                    color: Colors.red,
+                    child: Text('加入购物车',style: TextStyle(color: Colors.white),),
+                  ),
+                  ),
+                   
+                   ),
+                    Expanded(
+                      flex: 1,
+                      child:  InkWell(
+                  onTap:(){
+                    print('立即购买');
+                  },
+                  child: Container(
+                    height: 40,
+                    alignment: Alignment.center,
+                    color: Colors.orange,
+                    child: Text('立即购买',style: TextStyle(color: Colors.white),),
+                  ),
+                  )
+                    
+                    )
+                 ],
+               )
+              ],
+            ),
+           ),
+         )
+         );
+   }else{
+     return Text('cao');
+   }
  }
   @override
   Widget build(BuildContext context) {
@@ -238,8 +419,24 @@ var res= await Dio().get('http://jd.itying.com/api/pcontent?id='+id);
       appBar: AppBar(
         title: Text('商品详情页'),
       ),
-      body: Stack(
+      body: 
+      // FutureBuilder(
+      //       future: request('As','get', {"id":widget.goodsId}),
+      //       builder: (context,res){
+      //         if(res.data==null){
+      //           _loadMoreWidget();
+      //         }else{
+      //            res.data["pic"] = res.data["result"]["pic"].replaceAll(new RegExp(r'\\'), '/');
+      //           return  Container(
+      //              child: top1(res.data['result']),
+      //             //  child: Text("${res.data['title']}"),
+      //            );
+      //         }
+      //       }
+      //       ),
+       Stack(
         children: <Widget>[
+         
           ListView(
         children: <Widget>[
           Container(
@@ -252,7 +449,8 @@ var res= await Dio().get('http://jd.itying.com/api/pcontent?id='+id);
                    height: ScreenUtil().setHeight(90),
                    color: Colors.white,
                  ),
-                 xh()
+                 xh(),
+                 
               ],
             ),
             color: Colors.grey[100],
@@ -260,8 +458,10 @@ var res= await Dio().get('http://jd.itying.com/api/pcontent?id='+id);
         ],
       ),
           fiex(),//底部固定定位布局
+          tan(),
         ],
       )
+      
     );
   }
   

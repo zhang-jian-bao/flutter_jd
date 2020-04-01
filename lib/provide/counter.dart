@@ -6,6 +6,7 @@ class Counter with ChangeNotifier{//ChangeNotifier这个组件是用来检测数
     // int value = 100;//声明变量或储存状态
     var id;
     var arr=[];
+    var obj=[];
     // add(){
     //     value++;
     //     notifyListeners();        //数据变化后，这个方法会通知所有组件更新数据
@@ -14,7 +15,7 @@ class Counter with ChangeNotifier{//ChangeNotifier这个组件是用来检测数
     //     value--;
     //     notifyListeners();        //通知引用该变量地方的改变值
     // }
-    fenLei(pid) async{
+    fenLei(pid) async{//分类里面的右侧接口数据
       id=pid;
       print(id);
        var res=await http('HomePageSl', 'get', {"pid":id});
@@ -27,4 +28,8 @@ class Counter with ChangeNotifier{//ChangeNotifier这个组件是用来检测数
         });
          notifyListeners(); 
       }
+    addList(k){
+      print('加入购物车传递的值$k');
+      obj.add(k);
+    }
 }
