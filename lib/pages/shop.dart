@@ -11,12 +11,44 @@ class ShopPages extends StatefulWidget {
 }
 
 class _ShopPagesState extends State<ShopPages>  {
+var aa;
+var moey;
+ int n=0;
+//  void ss1(val){
+//    setState(() {
+//      moey+=int.parse(val['price'])*val['num'];
+//    });
+//  }
+//这是合计的方法，每次调用
+ void ad(){
+   int ao=0;//初始一个为0；否则会一直叠加
+   print('价格');
+   print(aa);
+   for(var item in aa){
 
+     print("这是item$item");
+    if(item['check']){
+       ao+=int.parse(item['price'])*item['num'];
+       print("价格${item['price']}");
+       print("数量${item['num']}");
+    }
+   }
+  setState(() {
+    moey=ao;
+  });
+ }
+ @override
+ void initState() { 
+   super.initState();
+    moey=0;
+ }
+bool cheall=false;//定义全选为false
 //从provide中获取数据，并循环，传值
 Widget ss(){
   return Provide<Counter>(
       //获取仓库数据渲染页面
       builder: (context, child, counter) {
+        aa=counter.obj;
         List<Widget> wares = counter.obj.map((val) {
           return InkWell(
                 child: Container(
@@ -49,6 +81,7 @@ Widget ss(){
       body: Stack(
       children: <Widget>[
         Container(
+          margin: EdgeInsets.only(bottom:80),
           child:ListView(children: <Widget>[
             ss()
           ],),
@@ -70,10 +103,26 @@ Widget ss(){
     return Container(
       alignment: Alignment.center,
       child: Checkbox(
-        value: true,
+        value: val['check'],
         activeColor: Colors.pinkAccent,
         onChanged: (bool) {
-          
+         setState(() {
+            val['check']=!val['check'];
+             if(val['check']){
+            n+=1;
+            // moey+=int.parse(val['price'])*val['num'];
+          }else{
+            n-=1;
+            // moey=0;
+          }
+          // print(moey);
+          if(n==aa.length){
+            cheall=true;
+          }else{
+            cheall=false;
+          }
+         });
+         ad();
         },
       ),
     );
@@ -103,12 +152,63 @@ Widget ss(){
       child: Column(
         children: <Widget>[
           Text("${val['title']}"),
-          // Text('$val')
+          jia(val)
+          // Text('${val['num']}'),
         ],
       ),
     );
   }
-
+ 
+//加减
+Widget jia(val){
+  return Row(
+    children: <Widget>[
+      InkWell(
+        onTap: (){
+          setState(() {
+            val['num']--;
+            if(val['num']<1){//当数量小于1的时候，删除当前数据
+              aa.remove(val);
+            }
+         
+          });
+         ad();
+         
+        },
+       child:Container(
+        child: Text('-',textAlign:TextAlign.center,),
+         decoration: BoxDecoration(
+            border: Border.all(width: 1,color: Colors.grey),
+          ),
+          padding: EdgeInsets.all(4),
+      ),
+      ),
+      Container(
+        child: Text("${val['num']}",textAlign:TextAlign.center,),
+         decoration: BoxDecoration(
+            border: Border.all(width: 1,color: Colors.grey),
+          ),
+          padding: EdgeInsets.all(4),
+      ),
+     InkWell(
+       onTap: (){
+         setState(() {
+           val['num']++;
+          
+         });
+         ad();
+       },
+       child:  Container(
+        child: Text('+',textAlign:TextAlign.center,),
+         decoration: BoxDecoration(
+            border: Border.all(width: 1,color: Colors.grey),
+          ),
+          padding: EdgeInsets.all(4),
+      ),
+     )
+    ],
+  );
+}
   //商品价格
   Widget _cartPrice(val) {
     return Container(
@@ -118,8 +218,13 @@ Widget ss(){
         children: <Widget>[
           Text("${val['price']}"),
           // Text('$val'),
-          Container(
+          Container(//点击删除
             child: InkWell(
+              onTap: (){
+               setState(() {//val就是整个数组的每一项
+                 aa.remove(val);
+               });
+              },
               child: Icon(
                 Icons.delete_forever,
                 color: Colors.black26,
@@ -134,7 +239,9 @@ Widget ss(){
   //底部结算组件
   
   Widget bottom(){
-    return Container(
+    // List<Widget> asc=[];
+    // for(var val in aa){
+       return Container(
       height: 50,
       width: 360,
       padding: const EdgeInsets.all(5.0),
@@ -147,15 +254,34 @@ Widget ss(){
         ],
       ),
     );
+    // }
+    
+    // return Row(children: asc,);
   }
   //全选按钮
   Widget _selectAllButton() {
     return Row(
       children: <Widget>[
         Checkbox(
-          value: true,
+          value: cheall,
           activeColor: Colors.pink,
-          onChanged: (bool val) {},
+          onChanged: (bool val) {
+            setState(() {
+              cheall=!cheall;
+              if(cheall){
+                n=aa.length;
+              }else{
+                n=0;
+              }
+            });
+            for(var i=0;i<aa.length;i++){
+              if(cheall){
+                aa[i]['check']=true;
+              }else{
+                 aa[i]['check']=false;
+              }
+            }
+          },
         ),
         Text('全选'),
       ],
@@ -184,7 +310,7 @@ Widget ss(){
                 alignment: Alignment.centerLeft,
                 width: 50,
                 child: Text(
-                  '￥1992',
+                  '￥$moey',
                   style: TextStyle(
                     color: Colors.pink,
                     fontSize:14,

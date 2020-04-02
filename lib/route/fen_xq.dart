@@ -28,6 +28,7 @@ class _FenXqState extends State<FenXq> {
     args=widget.goodsId;
     print(args+'id值');
     getRoute(args);
+   
   }
  //传入id值，读取接口
   Future getRoute(id) async{
@@ -55,7 +56,8 @@ var res= await Dio().get('http://jd.itying.com/api/pcontent?id='+id);
   load=true;
     }
     print(res);
-     
+      arr['num']=1;
+    arr['check']=false;
   }
   //刚开始加载动画
   Widget _loadMoreWidget() {
@@ -372,7 +374,9 @@ var res= await Dio().get('http://jd.itying.com/api/pcontent?id='+id);
                    setState(() {
                       loadd=false;
                       acc=[];
+                     
                    });
+                    
                     Provide.value<Counter>(context).addList(arr);
                    showToast('加入购物车成功');
                   },
